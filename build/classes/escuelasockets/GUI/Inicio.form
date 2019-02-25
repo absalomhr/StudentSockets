@@ -34,11 +34,14 @@
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="ScheludeB" max="32767" attributes="0"/>
                           <Component id="gradesB" max="32767" attributes="0"/>
-                          <Component id="welcomeLabel" max="32767" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+                      <Component id="welcomeLabel" min="-2" pref="262" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="159" max="32767" attributes="0"/>
+              <EmptySpace pref="67" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -49,7 +52,7 @@
               <Component id="logoutB" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Component id="welcomeLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="70" max="32767" attributes="0"/>
+              <EmptySpace pref="86" max="32767" attributes="0"/>
               <Component id="gradesB" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Component id="ScheludeB" min="-2" max="-2" attributes="0"/>
@@ -84,9 +87,6 @@
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="welcomeLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Welcome:"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

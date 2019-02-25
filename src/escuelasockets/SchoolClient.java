@@ -18,6 +18,7 @@ public class SchoolClient {
     private int port;
     private DataOutputStream dosToServer;
     private DataInputStream disFromFile;
+    private DataInputStream disFromServer;
 
     public SchoolClient() {
         host = "127.0.0.1";
@@ -70,13 +71,19 @@ public class SchoolClient {
         }
     }
     
-    public void Login (String studentId, String pass){
+    public String Login (String studentId, String pass){
         try {
+            String res;
             s = new Socket(host, port);
             dosToServer = new DataOutputStream(s.getOutputStream());
             dosToServer.writeInt(1);
+            dosToServer.writeUTF(studentId);
+            dosToServer.writeUTF(pass);
+            disFromServer = new DataInputStream(s.getInputStream());
+            return disFromServer.readUTF();
         }catch (Exception e){
             e.printStackTrace();
         }
+        return "";
     }
 }

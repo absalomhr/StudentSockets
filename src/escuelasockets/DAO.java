@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,6 +19,9 @@ public class DAO {
     private static final String SQL_INSERT_STUDENT
             = "insert into student (StudentId, Name, LastName, Password, StudentPhoto) "
             + "VALUES (?, ?, ?, ?, ?)";
+
+    private static final String SQL_SELECT_STUDENT
+            = "select * from student where StudentId = ?";
 
     public void createStudent(Long StudentId, String Name, String LastName, String pass, String StudentPhotoPath) throws SQLException {
         PreparedStatement ps = null;
@@ -32,8 +37,43 @@ public class DAO {
         } finally {
             close(ps);
             close(con);
-
         }
+    }
+
+    public Student selectStudent(Long StudentId) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SELECT_STUDENT);
+            ps.setLong(1, StudentId);
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0) {
+                return (Student) results.get(0);
+            } else {
+                return null;
+            }
+        } finally {
+            close(rs);
+            close(ps);
+            close(con);
+        }
+    }
+
+    private List getResults(ResultSet rs) throws SQLException {
+        List results = new ArrayList();
+        while (rs.next()) {
+            Student s = new Student();
+            s.setLastName(rs.getString("lastName"));
+            s.setName(rs.getString("Name"));
+            s.setPass(rs.getString("Password"));
+            s.setStudentId(rs.getLong("studentId"));
+            s.setStudentPhotoPath("StudentPhoto");
+
+            results.add(s);
+        }
+        return results;
     }
 
     private void getConnection() {

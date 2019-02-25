@@ -3,6 +3,8 @@ package escuelasockets.GUI;
 import escuelasockets.SchoolClient;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 /**
@@ -11,10 +13,26 @@ import javax.swing.JFrame;
  */
 public class Login extends javax.swing.JFrame {
 
+    private String clientRoute;
+    private JFileChooser jfc;
     /**
      * Creates new form Login
      */
     public Login() {
+        
+        File f = null;
+        jfc = new JFileChooser();
+        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (jfc.isMultiSelectionEnabled()) {
+            jfc.setMultiSelectionEnabled(false);
+        }
+        int r = jfc.showOpenDialog(null);
+        if (r == JFileChooser.APPROVE_OPTION) {
+            f = jfc.getSelectedFile();
+        }
+
+        clientRoute = f.getAbsolutePath();
+        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
@@ -39,6 +57,7 @@ public class Login extends javax.swing.JFrame {
         signInB = new javax.swing.JButton();
         signUpB = new javax.swing.JButton();
         welcomeLabel = new javax.swing.JLabel();
+        warningLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,13 +97,15 @@ public class Login extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(userLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                                .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(passLabel)
                                 .addGap(39, 39, 39)
-                                .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(userLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(warningLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(passTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(welcomeLabel)))
@@ -103,7 +124,9 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passLabel)
                     .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(warningLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signInB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(signUpB)
@@ -115,7 +138,13 @@ public class Login extends javax.swing.JFrame {
 
     private void signInBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBActionPerformed
         SchoolClient client = new SchoolClient();
-        
+        String res = client.Login(userTextField.getText(), passTextField.getText());
+        if (res.equals("")){
+            warningLabel.setText("Not correct user or password");
+        } else {
+            Inicio i = new Inicio(res);
+            this.dispose();
+        }
     }//GEN-LAST:event_signInBActionPerformed
 
     private void signUpBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBActionPerformed
@@ -166,6 +195,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton signUpB;
     private javax.swing.JLabel userLabel;
     private javax.swing.JTextField userTextField;
+    private javax.swing.JLabel warningLabel;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

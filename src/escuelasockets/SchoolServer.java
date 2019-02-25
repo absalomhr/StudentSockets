@@ -13,16 +13,17 @@ import javax.swing.JFileChooser;
  * @author Absalom Herrera
  */
 public class SchoolServer {
-
+    
     private ServerSocket s;
     private Socket cl;
     private JFileChooser jfc; // Route where files are going to be stored on the server side
     private static String serverRoute;
     private DataOutputStream dosToFile;
+    private DataOutputStream dosToCl;
     private DataInputStream disFromCl;
     private int clientRequest; // 0 = upload student
     int port;
-
+    
     public SchoolServer() {
         // Choosing server directory (for testing test)
         File f = null;
@@ -35,11 +36,11 @@ public class SchoolServer {
         if (r == JFileChooser.APPROVE_OPTION) {
             f = jfc.getSelectedFile();
         }
-
+        
         serverRoute = f.getAbsolutePath();
         clientRequest = 0;
         port = 9999;
-
+        
         try {
             s = new ServerSocket(port);
             s.setReuseAddress(true);
@@ -48,7 +49,7 @@ public class SchoolServer {
             e.printStackTrace();
         }
     }
-
+    
     public void connect() {
         try {
             for (;;) {
@@ -60,6 +61,9 @@ public class SchoolServer {
                 clientRequest = disFromCl.readInt();
                 if (clientRequest == 0) {
                     receiveStudent();
+                } else if (clientRequest == 1) {
+                    dosToCl = new DataOutputStream(cl.getOutputStream());
+                    login();
                 }
             }
         } catch (Exception e) {
@@ -67,7 +71,7 @@ public class SchoolServer {
             e.printStackTrace();
         }
     }
-
+    
     public void receiveStudent() {
         long fileSize;
         String fileName;
@@ -87,11 +91,11 @@ public class SchoolServer {
             studentName = disFromCl.readUTF();
             studentLastName = disFromCl.readUTF();
             studentPass = disFromCl.readUTF();
-
+            
             System.out.println("RECEIVING IMAGE: " + fileName);
             studentPhotoPath = serverRoute + "\\" + studentId + "." + fileExt;
             dosToFile = new DataOutputStream((new FileOutputStream(studentPhotoPath)));
-
+            
             long r = 0;
             int n = 0, percent = 0;
             while (r < fileSize) {
@@ -105,7 +109,7 @@ public class SchoolServer {
             }
             dosToFile.close();
             disFromCl.close();
-
+            
             System.out.println("\n\nSTUDENT RECEIVED: ");
             System.out.println("ID: " + studentId);
             System.out.println("PASS: " + studentPass);
@@ -114,16 +118,35 @@ public class SchoolServer {
             System.out.println("PATH: " + studentPhotoPath);
             DAO dao = new DAO();
             dao.createStudent(Long.parseLong(studentId), studentName, studentLastName, studentPass, studentPhotoPath);
-
+            
         } catch (Exception e) {
-            System.err.println("RECEIVE IMAGE ERROR:");
+            System.err.println("RECEIVE STUDENT ERROR:");
             e.printStackTrace();
         }
-
+        
     }
-
+    
+    private void login() {
+        try {
+            String user, pass;
+            user = disFromCl.readUTF();
+            pass = disFromCl.readUTF();
+            DAO dao = new DAO();
+            Student s = dao.selectStudent(Long.parseLong(user));
+            if (s != null && s.getPass().equals(pass)) {
+                dosToCl.writeUTF(s.getName());
+            } else {
+                dosToCl.writeUTF("");
+            }
+        } catch (Exception e) {
+            System.err.println("LOGIN SERVER ERROR");
+            e.printStackTrace();
+        }
+    }
+    
     public static void main(String args[]) {
         SchoolServer s = new SchoolServer();
         s.connect();
     }
+    
 }
