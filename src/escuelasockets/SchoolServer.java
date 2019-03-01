@@ -3,6 +3,7 @@ package escuelasockets;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,6 +22,7 @@ public class SchoolServer {
     private DataOutputStream dosToFile;
     private DataOutputStream dosToCl;
     private DataInputStream disFromCl;
+    private DataInputStream disFromFile;
     private int clientRequest; // 0 = upload student
     int port;
     
@@ -134,9 +136,33 @@ public class SchoolServer {
             DAO dao = new DAO();
             Student s = dao.selectStudent(Long.parseLong(user));
             if (s != null && s.getPass().equals(pass)) {
+                System.out.println("No es null");
+                dosToCl.writeLong(s.getStudentId());
+                System.out.println("estudiante de base: "+ s.toString());
+                File f = new File(s.getStudentPhotoPath());
+                disFromFile = new DataInputStream(new FileInputStream(s.getStudentPhotoPath()));
+                Long fileSize = f.length();
+                String name = f.getName();
                 dosToCl.writeUTF(s.getName());
+                dosToCl.writeLong(fileSize);
+                dosToCl.writeUTF(name);
+                
+                long sent = 0;
+                int percent = 0, n = 0;
+                disFromFile = new DataInputStream(new FileInputStream(f.getAbsolutePath()));
+                while (sent < fileSize) {
+                    byte[] b = new byte[1500];
+                    n = disFromFile.read(b);
+                    dosToCl.write(b, 0, n);
+                    dosToCl.flush();
+                    sent += n;
+                    percent = (int) ((sent * 100) / fileSize);
+                    System.out.print("\rSENT: " + percent + " %");
+                }
+                disFromFile.close();
+                
             } else {
-                dosToCl.writeUTF("");
+                dosToCl.writeLong(0);
             }
         } catch (Exception e) {
             System.err.println("LOGIN SERVER ERROR");

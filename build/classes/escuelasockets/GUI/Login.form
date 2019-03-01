@@ -45,8 +45,8 @@
                               <Component id="passLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="warningLabel" max="32767" attributes="0"/>
-                                  <Component id="passTextField" pref="238" max="32767" attributes="0"/>
+                                  <Component id="warningLabel" pref="238" max="32767" attributes="0"/>
+                                  <Component id="passTextField" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -70,12 +70,12 @@
                   <Component id="userLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="userTextField" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="passLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="passTextField" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="passLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="passTextField" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="33" max="32767" attributes="0"/>
+              <EmptySpace pref="37" max="32767" attributes="0"/>
               <Component id="warningLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="signInB" min="-2" max="-2" attributes="0"/>
@@ -99,8 +99,6 @@
         <Property name="text" type="java.lang.String" value="Password: "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="passTextField">
-    </Component>
     <Component class="javax.swing.JButton" name="signInB">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sign in"/>
@@ -123,6 +121,8 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="warningLabel">
+    </Component>
+    <Component class="javax.swing.JPasswordField" name="passTextField">
     </Component>
   </SubComponents>
 </Form>

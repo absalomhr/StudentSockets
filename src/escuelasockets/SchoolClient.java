@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.Socket;
 import org.apache.commons.io.FilenameUtils;
 
@@ -17,6 +18,7 @@ public class SchoolClient {
     private String host;
     private int port;
     private DataOutputStream dosToServer;
+    private DataOutputStream dosToFile;
     private DataInputStream disFromFile;
     private DataInputStream disFromServer;
 
@@ -71,19 +73,49 @@ public class SchoolClient {
         }
     }
     
-    public String Login (String studentId, String pass){
+    public SignInData Login (String studentId, String pass, String clientRoute){
+        SignInData sid = new SignInData();
         try {
-            String res;
+            
+            sid.setResultStudentId(new Long (0));
+            Long res;
             s = new Socket(host, port);
             dosToServer = new DataOutputStream(s.getOutputStream());
             dosToServer.writeInt(1);
             dosToServer.writeUTF(studentId);
             dosToServer.writeUTF(pass);
             disFromServer = new DataInputStream(s.getInputStream());
-            return disFromServer.readUTF();
+            res = disFromServer.readLong();
+            if (!(res.equals(new Long (0)))){
+                sid.setResultStudentId(res);
+                System.out.println("No es cero cl");
+                long fileSize;
+                String name;
+                String studentName = disFromServer.readUTF();
+                sid.setStudentName(studentName);
+                fileSize = disFromServer.readLong();
+                name = disFromServer.readUTF();
+                
+                dosToFile = new DataOutputStream(new FileOutputStream(clientRoute + "\\" + name));
+                sid.setStudentPhotoClientPath(clientRoute + "\\" + name);
+                long r = 0;
+                int n = 0, percent = 0;
+                while (r < fileSize) {
+                    byte[] b = new byte[1500];
+                    n = disFromServer.read(b);
+                    dosToFile.write(b, 0, n);
+                    dosToFile.flush();
+                    r += n;
+                    percent = (int) ((r * 100) / fileSize);
+                    System.out.print("\rRECEIVING: " + percent + "%");
+                }
+                dosToFile.close();
+                disFromServer.close();
+                return sid;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "";
+        return sid;
     }
 }

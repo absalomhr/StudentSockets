@@ -50,9 +50,9 @@ public class SignUp extends javax.swing.JFrame {
         cancelB = new javax.swing.JButton();
         signUpB = new javax.swing.JButton();
         passLabel = new javax.swing.JLabel();
-        passTextField = new javax.swing.JTextField();
         attachB = new javax.swing.JButton();
         imageFileNameLabel = new javax.swing.JLabel();
+        passTextField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,14 +114,14 @@ public class SignUp extends javax.swing.JFrame {
                             .addComponent(studentTextField)
                             .addComponent(studentNameTextField)
                             .addComponent(studentLastNameTextField)
-                            .addComponent(passTextField)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 115, Short.MAX_VALUE)
                                 .addComponent(signUpB)
                                 .addGap(11, 11, 11))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(attachB)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(passTextField)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(153, 153, 153)
                         .addComponent(signUpLabel)
@@ -139,29 +139,28 @@ public class SignUp extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(signUpLabel)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(studentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(idLabel))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(nameLabel))
-                                    .addComponent(studentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(signUpLabel)
                                 .addGap(18, 18, 18)
-                                .addComponent(lastNameLabel))
-                            .addComponent(studentLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(studentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(idLabel))
+                                .addGap(18, 18, 18)
+                                .addComponent(nameLabel))
+                            .addComponent(studentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(passLabel))
-                    .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                        .addComponent(lastNameLabel))
+                    .addComponent(studentLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passLabel))
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(studentPhotoLabel)
                     .addComponent(attachB))
                 .addGap(18, 18, 18)
                 .addComponent(imageFileNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelB)
                     .addComponent(signUpB))
@@ -217,7 +216,7 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JLabel lastNameLabel;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JLabel passLabel;
-    private javax.swing.JTextField passTextField;
+    private javax.swing.JPasswordField passTextField;
     private javax.swing.JButton signUpB;
     private javax.swing.JLabel signUpLabel;
     private javax.swing.JTextField studentLastNameTextField;

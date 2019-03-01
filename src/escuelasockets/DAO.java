@@ -65,11 +65,11 @@ public class DAO {
         List results = new ArrayList();
         while (rs.next()) {
             Student s = new Student();
-            s.setLastName(rs.getString("lastName"));
+            s.setStudentId(rs.getLong("StudentId"));
             s.setName(rs.getString("Name"));
+            s.setLastName(rs.getString("LastName"));
             s.setPass(rs.getString("Password"));
-            s.setStudentId(rs.getLong("studentId"));
-            s.setStudentPhotoPath("StudentPhoto");
+            s.setStudentPhotoPath(rs.getString("StudentPhoto"));
 
             results.add(s);
         }
@@ -79,7 +79,7 @@ public class DAO {
     private void getConnection() {
         String user = "root";
         String pwd = "absalom94";
-        String url = "jdbc:mysql://localhost:3306/School?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false";
+        String url = "jdbc:mysql://localhost:3306/School?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true";
         String mySqlDriver = "com.mysql.jdbc.Driver";
         try {
             Class.forName(mySqlDriver);

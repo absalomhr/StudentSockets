@@ -5,9 +5,15 @@
  */
 package escuelasockets.GUI;
 
-import escuelasockets.Student;
+import escuelasockets.SignInData;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 /**
  *
@@ -15,15 +21,26 @@ import java.awt.Toolkit;
  */
 public class Inicio extends javax.swing.JFrame {
 
-    private String studentName;
+    private SignInData sid;
     
     /**
      * Creates new form Inicio
      */
-    public Inicio(String studentName) {
-        this.studentName = studentName;
+    public Inicio(SignInData sid) {
+        this.sid = sid;
         initComponents();
-        welcomeLabel.setText("Welcome, "+ studentName + "!");
+        
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(new File(sid.getStudentPhotoClientPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Image dimg = img.getScaledInstance(picLabel.getWidth(), picLabel.getHeight(), Image.SCALE_SMOOTH);
+        
+        ImageIcon ic = new ImageIcon(dimg);
+        picLabel.setIcon(ic);
+        welcomeLabel.setText("Welcome, "+ sid.getStudentName() + "!");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);
@@ -43,6 +60,7 @@ public class Inicio extends javax.swing.JFrame {
         gradesB = new javax.swing.JButton();
         ScheludeB = new javax.swing.JButton();
         welcomeLabel = new javax.swing.JLabel();
+        picLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,26 +92,34 @@ public class Inicio extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(logoutB))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(158, 158, 158)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(ScheludeB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gradesB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(gradesB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(67, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(logoutB))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                        .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(logoutB)
-                .addGap(18, 18, 18)
-                .addComponent(welcomeLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(logoutB)
+                        .addGap(29, 29, 29)
+                        .addComponent(welcomeLabel))
+                    .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
                 .addComponent(gradesB)
                 .addGap(31, 31, 31)
                 .addComponent(ScheludeB)
@@ -121,6 +147,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton ScheludeB;
     private javax.swing.JButton gradesB;
     private javax.swing.JButton logoutB;
+    private javax.swing.JLabel picLabel;
     private javax.swing.JLabel welcomeLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -50,6 +50,11 @@ public class Student {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" + "name=" + name + ", lastName=" + lastName + ", studentPhotoPath=" + studentPhotoPath + ", studentId=" + studentId + ", pass=" + pass + '}';
+    }
     
     
 }

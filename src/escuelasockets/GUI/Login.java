@@ -1,6 +1,7 @@
 package escuelasockets.GUI;
 
 import escuelasockets.SchoolClient;
+import escuelasockets.SignInData;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -19,6 +20,7 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
+        
         
         File f = null;
         jfc = new JFileChooser();
@@ -53,11 +55,11 @@ public class Login extends javax.swing.JFrame {
         userLabel = new javax.swing.JLabel();
         userTextField = new javax.swing.JTextField();
         passLabel = new javax.swing.JLabel();
-        passTextField = new javax.swing.JTextField();
         signInB = new javax.swing.JButton();
         signUpB = new javax.swing.JButton();
         welcomeLabel = new javax.swing.JLabel();
         warningLabel = new javax.swing.JLabel();
+        passTextField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,8 +106,8 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(passLabel)
                                 .addGap(39, 39, 39)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(warningLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(passTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)))))
+                                    .addComponent(warningLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                                    .addComponent(passTextField)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(welcomeLabel)))
@@ -120,11 +122,11 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(userLabel)
                     .addComponent(userTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(passLabel)
                     .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(warningLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(signInB)
@@ -138,8 +140,9 @@ public class Login extends javax.swing.JFrame {
 
     private void signInBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBActionPerformed
         SchoolClient client = new SchoolClient();
-        String res = client.Login(userTextField.getText(), passTextField.getText());
-        if (res.equals("")){
+        SignInData res = client.Login(userTextField.getText(), passTextField.getText(), clientRoute);
+        if (res.getResultStudentId().equals(new Long(0))){
+            System.out.println("No es cero signin");
             warningLabel.setText("Not correct user or password");
         } else {
             Inicio i = new Inicio(res);
@@ -190,7 +193,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel passLabel;
-    private javax.swing.JTextField passTextField;
+    private javax.swing.JPasswordField passTextField;
     private javax.swing.JButton signInB;
     private javax.swing.JButton signUpB;
     private javax.swing.JLabel userLabel;
