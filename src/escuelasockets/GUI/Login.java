@@ -1,7 +1,8 @@
 package escuelasockets.GUI;
 
+import escuelasockets.Professor;
 import escuelasockets.SchoolClient;
-import escuelasockets.SignInData;
+import escuelasockets.Student;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -20,21 +21,6 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-        
-        
-        File f = null;
-        jfc = new JFileChooser();
-        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (jfc.isMultiSelectionEnabled()) {
-            jfc.setMultiSelectionEnabled(false);
-        }
-        int r = jfc.showOpenDialog(null);
-        if (r == JFileChooser.APPROVE_OPTION) {
-            f = jfc.getSelectedFile();
-        }
-
-        clientRoute = f.getAbsolutePath();
-        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
@@ -140,13 +126,21 @@ public class Login extends javax.swing.JFrame {
 
     private void signInBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signInBActionPerformed
         SchoolClient client = new SchoolClient();
-        SignInData res = client.Login(userTextField.getText(), passTextField.getText(), clientRoute);
-        if (res.getResultStudentId().equals(new Long(0))){
-            System.out.println("No es cero signin");
-            warningLabel.setText("Not correct user or password");
+        Student st = new Student();
+        st.setStudentId(Long.parseLong(userTextField.getText()));
+        st.setPass(passTextField.getText());        
+        Object o = client.Login(st);
+        if (o != null){
+            if (o instanceof Student) {
+                IndexStudent is = new IndexStudent((Student) o);
+                is.setVisible(true);
+                this.dispose();
+            }
+            else if (o instanceof Professor) {
+                System.out.println("Recibi profesor!");
+            }
         } else {
-            Inicio i = new Inicio(res);
-            this.dispose();
+            warningLabel.setText("Incorrect user/password");
         }
     }//GEN-LAST:event_signInBActionPerformed
 

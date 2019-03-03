@@ -22,17 +22,20 @@ public class DAO {
 
     private static final String SQL_SELECT_STUDENT
             = "select * from student where StudentId = ?";
+    
+    private static final String SQL_SELECT_PROFESSOR
+            = "select * from professor where professorId = ?";
 
-    public void createStudent(Long StudentId, String Name, String LastName, String pass, String StudentPhotoPath) throws SQLException {
+    public void createStudent(Student s) throws SQLException {
         PreparedStatement ps = null;
         getConnection();
         try {
             ps = con.prepareStatement(SQL_INSERT_STUDENT);
-            ps.setLong(1, StudentId);
-            ps.setString(2, Name);
-            ps.setString(3, LastName);
-            ps.setString(4, pass);
-            ps.setString(5, StudentPhotoPath);
+            ps.setLong(1, s.getStudentId());
+            ps.setString(2, s.getName());
+            ps.setString(3, s.getLastName());
+            ps.setString(4, s.getPass());
+            ps.setString(5, s.getStudentPhotoPath());
             ps.executeUpdate();
         } finally {
             close(ps);
@@ -40,15 +43,15 @@ public class DAO {
         }
     }
 
-    public Student selectStudent(Long StudentId) throws SQLException {
+    public Student selectStudent(Long studentId) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         getConnection();
         try {
             ps = con.prepareStatement(SQL_SELECT_STUDENT);
-            ps.setLong(1, StudentId);
+            ps.setLong(1, studentId);
             rs = ps.executeQuery();
-            List results = getResults(rs);
+            List results = getResultsStudent(rs);
             if (results.size() > 0) {
                 return (Student) results.get(0);
             } else {
@@ -61,7 +64,28 @@ public class DAO {
         }
     }
 
-    private List getResults(ResultSet rs) throws SQLException {
+    public Professor selectProfessor (Long professorId) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SELECT_PROFESSOR);
+            ps.setLong(1, professorId);
+            rs = ps.executeQuery();
+            List results = getResultsProfessor(rs);
+            if (results.size() > 0) {
+                return (Professor) results.get(0);
+            } else {
+                return null;
+            }
+        } finally {
+            close(rs);
+            close(ps);
+            close(con);
+        }
+    }
+    
+    private List getResultsStudent(ResultSet rs) throws SQLException {
         List results = new ArrayList();
         while (rs.next()) {
             Student s = new Student();
@@ -72,6 +96,19 @@ public class DAO {
             s.setStudentPhotoPath(rs.getString("StudentPhoto"));
 
             results.add(s);
+        }
+        return results;
+    }
+    
+    private List getResultsProfessor(ResultSet rs) throws SQLException {
+        List results = new ArrayList();
+        while (rs.next()) {
+            Professor p = new Professor();
+            p.setId(rs.getLong("professorId"));
+            p.setName(rs.getString("Name"));
+            p.setLastname(rs.getString("LastName"));
+            p.setPass(rs.getString("Password"));
+            results.add(p);
         }
         return results;
     }

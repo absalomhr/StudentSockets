@@ -1,6 +1,7 @@
 package escuelasockets.GUI;
 
 import escuelasockets.SchoolClient;
+import escuelasockets.Student;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
@@ -41,11 +42,11 @@ public class SignUp extends javax.swing.JFrame {
 
         signUpLabel = new javax.swing.JLabel();
         idLabel = new javax.swing.JLabel();
-        studentTextField = new javax.swing.JTextField();
+        idTextField = new javax.swing.JTextField();
         nameLabel = new javax.swing.JLabel();
         lastNameLabel = new javax.swing.JLabel();
-        studentNameTextField = new javax.swing.JTextField();
-        studentLastNameTextField = new javax.swing.JTextField();
+        nameTextField = new javax.swing.JTextField();
+        lastNameTextField = new javax.swing.JTextField();
         studentPhotoLabel = new javax.swing.JLabel();
         cancelB = new javax.swing.JButton();
         signUpB = new javax.swing.JButton();
@@ -111,9 +112,9 @@ public class SignUp extends javax.swing.JFrame {
                                 .addComponent(lastNameLabel)
                                 .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(studentTextField)
-                            .addComponent(studentNameTextField)
-                            .addComponent(studentLastNameTextField)
+                            .addComponent(idTextField)
+                            .addComponent(nameTextField)
+                            .addComponent(lastNameTextField)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(0, 115, Short.MAX_VALUE)
                                 .addComponent(signUpB)
@@ -142,14 +143,14 @@ public class SignUp extends javax.swing.JFrame {
                                 .addComponent(signUpLabel)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(studentTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(idLabel))
                                 .addGap(18, 18, 18)
                                 .addComponent(nameLabel))
-                            .addComponent(studentNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(lastNameLabel))
-                    .addComponent(studentLastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lastNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(passTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,12 +197,15 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelBActionPerformed
 
     private void signUpBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBActionPerformed
-        SchoolClient client = new SchoolClient();
-        String studentId = studentTextField.getText();
-        String studentName = studentNameTextField.getText();
-        String studentLastName = studentLastNameTextField.getText();
-        String studentPass = passTextField.getText();
-        client.sendStudent(f,studentId, studentName, studentLastName, studentPass);
+        Student s = new Student();
+        s.setName(nameTextField.getText());
+        s.setLastName(lastNameTextField.getText());
+        s.setStudentId(Long.parseLong(idTextField.getText()));
+        s.setPass(passTextField.getText());
+        s.setStudentPhotoPath(f.getAbsolutePath());
+        
+        SchoolClient c = new SchoolClient();
+        c.sendStudent(s);
         
         Login l = new Login();
         l.setVisible(true);
@@ -212,16 +216,16 @@ public class SignUp extends javax.swing.JFrame {
     private javax.swing.JButton attachB;
     private javax.swing.JButton cancelB;
     private javax.swing.JLabel idLabel;
+    private javax.swing.JTextField idTextField;
     private javax.swing.JLabel imageFileNameLabel;
     private javax.swing.JLabel lastNameLabel;
+    private javax.swing.JTextField lastNameTextField;
     private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField nameTextField;
     private javax.swing.JLabel passLabel;
     private javax.swing.JPasswordField passTextField;
     private javax.swing.JButton signUpB;
     private javax.swing.JLabel signUpLabel;
-    private javax.swing.JTextField studentLastNameTextField;
-    private javax.swing.JTextField studentNameTextField;
     private javax.swing.JLabel studentPhotoLabel;
-    private javax.swing.JTextField studentTextField;
     // End of variables declaration//GEN-END:variables
 }

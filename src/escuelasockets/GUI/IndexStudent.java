@@ -5,7 +5,7 @@
  */
 package escuelasockets.GUI;
 
-import escuelasockets.SignInData;
+import escuelasockets.Student;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -19,20 +19,19 @@ import java.awt.Image;
  *
  * @author Absalom Herrera
  */
-public class Inicio extends javax.swing.JFrame {
-
-    private SignInData sid;
+public class IndexStudent extends javax.swing.JFrame {
     
+    private Student s;
     /**
      * Creates new form Inicio
      */
-    public Inicio(SignInData sid) {
-        this.sid = sid;
+    public IndexStudent(Student s) {
+        this.s = s;
         initComponents();
         
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File(sid.getStudentPhotoClientPath()));
+            img = ImageIO.read(new File(s.getStudentPhotoPath()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,7 +39,7 @@ public class Inicio extends javax.swing.JFrame {
         
         ImageIcon ic = new ImageIcon(dimg);
         picLabel.setIcon(ic);
-        welcomeLabel.setText("Welcome, "+ sid.getStudentName() + "!");
+        welcomeLabel.setText("Welcome, "+ s.getName() + "!");
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);

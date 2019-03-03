@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import javax.swing.JFileChooser;
@@ -21,26 +23,17 @@ public class SchoolServer {
     private static String serverRoute;
     private DataOutputStream dosToFile;
     private DataOutputStream dosToCl;
-    private DataInputStream disFromCl;
+    private ObjectOutputStream oosToCl;
+    private ObjectInputStream oisFromCl;
     private DataInputStream disFromFile;
+    private DataInputStream disFromCl;
+    
     private int clientRequest; // 0 = upload student
     int port;
     
     public SchoolServer() {
-        // Choosing server directory (for testing test)
-        File f = null;
-        jfc = new JFileChooser();
-        jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (jfc.isMultiSelectionEnabled()) {
-            jfc.setMultiSelectionEnabled(false);
-        }
-        int r = jfc.showOpenDialog(null);
-        if (r == JFileChooser.APPROVE_OPTION) {
-            f = jfc.getSelectedFile();
-        }
-        
-        serverRoute = f.getAbsolutePath();
-        clientRequest = 0;
+        serverRoute = "C:\\Users\\elpat\\Documents\\lolaz";
+        clientRequest = -1;
         port = 9999;
         
         try {
@@ -58,13 +51,13 @@ public class SchoolServer {
                 System.out.println("\nSERVER ON, WAITING FOR CLIENT CONNECTION");
                 cl = s.accept();
                 System.out.println("CLIENT FROM: " + cl.getInetAddress() + " PORT: " + cl.getPort());
-                disFromCl = new DataInputStream(cl.getInputStream());
+                oisFromCl = new ObjectInputStream (cl.getInputStream());
                 // 0 = upload student
-                clientRequest = disFromCl.readInt();
+                Option op = (Option) oisFromCl.readObject();
+                clientRequest = op.getOption();
                 if (clientRequest == 0) {
                     receiveStudent();
                 } else if (clientRequest == 1) {
-                    dosToCl = new DataOutputStream(cl.getOutputStream());
                     login();
                 }
             }
@@ -77,25 +70,17 @@ public class SchoolServer {
     public void receiveStudent() {
         long fileSize;
         String fileName;
-        String fileExt;
-        String studentId = "";
-        String studentName = "";
-        String studentLastName = "";
-        String studentPass = "";
-        String studentPhotoPath = "";
         try {
-
+            Student st = (Student) oisFromCl.readObject();
+            ServerSocket s1 = new ServerSocket(port+1);
+            Socket cl2 = s1.accept();
+            disFromCl = new DataInputStream(cl2.getInputStream());
             // Reading image data: size, name, file extention, student id, student name, last name, pass
             fileSize = disFromCl.readLong();
             fileName = disFromCl.readUTF();
-            fileExt = disFromCl.readUTF();
-            studentId = disFromCl.readUTF();
-            studentName = disFromCl.readUTF();
-            studentLastName = disFromCl.readUTF();
-            studentPass = disFromCl.readUTF();
             
             System.out.println("RECEIVING IMAGE: " + fileName);
-            studentPhotoPath = serverRoute + "\\" + studentId + "." + fileExt;
+            String studentPhotoPath = serverRoute + "\\" + fileName;
             dosToFile = new DataOutputStream((new FileOutputStream(studentPhotoPath)));
             
             long r = 0;
@@ -111,18 +96,19 @@ public class SchoolServer {
             }
             dosToFile.close();
             disFromCl.close();
-            
+            cl2.close();
+            s1.close();;
+            st.setStudentPhotoPath(studentPhotoPath);
             System.out.println("\n\nSTUDENT RECEIVED: ");
-            System.out.println("ID: " + studentId);
-            System.out.println("PASS: " + studentPass);
-            System.out.println("NAME: " + studentName);
-            System.out.println("LAST NAME: " + studentLastName);
-            System.out.println("PATH: " + studentPhotoPath);
+            System.out.println("ID: " + st.getStudentId());
+            System.out.println("PASS: " + st.getPass());
+            System.out.println("NAME: " + st.getName());
+            System.out.println("LAST NAME: " + st.getLastName());
+            System.out.println("PATH: " + st.getStudentPhotoPath()); 
             DAO dao = new DAO();
-            dao.createStudent(Long.parseLong(studentId), studentName, studentLastName, studentPass, studentPhotoPath);
-            
+            dao.createStudent(st);
         } catch (Exception e) {
-            System.err.println("RECEIVE STUDENT ERROR:");
+            System.err.println("RECEIVE STUDENT ERROR\n");
             e.printStackTrace();
         }
         
@@ -130,20 +116,26 @@ public class SchoolServer {
     
     private void login() {
         try {
-            String user, pass;
-            user = disFromCl.readUTF();
-            pass = disFromCl.readUTF();
+            Student st = (Student) oisFromCl.readObject();
+            Long user;
+            String pass;
+            user = st.getStudentId();
+            pass = st.getPass();
             DAO dao = new DAO();
-            Student s = dao.selectStudent(Long.parseLong(user));
-            if (s != null && s.getPass().equals(pass)) {
-                System.out.println("No es null");
-                dosToCl.writeLong(s.getStudentId());
-                System.out.println("estudiante de base: "+ s.toString());
-                File f = new File(s.getStudentPhotoPath());
-                disFromFile = new DataInputStream(new FileInputStream(s.getStudentPhotoPath()));
+            Student st2 = dao.selectStudent(user);
+            oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            if (st2 != null && st2.getPass().equals(pass)) {
+                oosToCl.writeObject(new Option(0)); // 0 Student, 1 Professor, 2 NotFound
+                oosToCl.writeObject(st2);
+                
+                File f = new File(st2.getStudentPhotoPath());
+                disFromFile = new DataInputStream(new FileInputStream(st2.getStudentPhotoPath()));
                 Long fileSize = f.length();
                 String name = f.getName();
-                dosToCl.writeUTF(s.getName());
+                ServerSocket s2 = new ServerSocket(port+1);
+                Socket cl2 = s2.accept();
+                dosToCl = new DataOutputStream(cl2.getOutputStream());
+                
                 dosToCl.writeLong(fileSize);
                 dosToCl.writeUTF(name);
                 
@@ -160,9 +152,18 @@ public class SchoolServer {
                     System.out.print("\rSENT: " + percent + " %");
                 }
                 disFromFile.close();
-                
-            } else {
-                dosToCl.writeLong(0);
+                dosToCl.close();
+                cl2.close();
+                s2.close();
+            } else if (st2 == null) {
+                Professor p = dao.selectProfessor(user);
+                if (p != null && p.getPass().equals(pass)){
+                    oosToCl.writeObject(new Option(1)); // 0 Student, 1 Professor, 2 NotFound
+                    oosToCl.writeObject(p);
+                    oosToCl.close();
+                } else {
+                    oosToCl.writeObject(new Option(2)); // 0 Student, 1 Professor, 2 NotFound
+                }
             }
         } catch (Exception e) {
             System.err.println("LOGIN SERVER ERROR");

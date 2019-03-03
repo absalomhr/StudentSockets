@@ -1,10 +1,12 @@
 package escuelasockets;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Absalom Herrera
  */
-public class Student {
+public class Student implements Serializable{
     private String name;
     private String lastName;
     private String studentPhotoPath;
