@@ -25,7 +25,10 @@ public class DAO {
     
     private static final String SQL_SELECT_PROFESSOR
             = "select * from professor where professorId = ?";
-
+    
+    private static final String SQL_SELECT_SCHELUDE_ALL1 = "create or replace view prof as select professorId, concat (name, ' ', lastname) as profname from professor";
+    private static final String SQL_SELECT_SCHELUDE_ALL2 = "create or replace view c as select schelude.idschelude, schelude.day1, schelude.day2, schelude.day3, schelude.day4, schelude.day5, schelude.professorId, course.name from schelude inner join course on schelude.courseId=course.courseId";
+    private static final String SQL_SELECT_SCHELUDE_ALL3 = "select c.idschelude, c.day1, c.day2, c.day3, c.day4, c.day5, c.name, prof.profname from c, prof where c.professorId=prof.professorId";
     public void createStudent(Student s) throws SQLException {
         PreparedStatement ps = null;
         getConnection();
@@ -85,6 +88,34 @@ public class DAO {
         }
     }
     
+    public List selectScheludeAll () throws SQLException {
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
+        PreparedStatement ps3 = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps1 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL1);
+            ps2 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL2);
+            ps3 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL3);
+            ps1.executeUpdate();
+            ps2.executeUpdate();
+            rs = ps3.executeQuery();
+            List results = getResultsSchelude(rs);
+            if (results.size() > 0) {
+                return results;
+            } else {
+                return null;
+            }
+        } finally {
+            close(rs);
+            close(ps1);
+            close(ps2);
+            close(ps3);
+            close(con);
+        }
+    }
+    
     private List getResultsStudent(ResultSet rs) throws SQLException {
         List results = new ArrayList();
         while (rs.next()) {
@@ -109,6 +140,23 @@ public class DAO {
             p.setLastname(rs.getString("LastName"));
             p.setPass(rs.getString("Password"));
             results.add(p);
+        }
+        return results;
+    }
+    
+    private List getResultsSchelude (ResultSet rs) throws SQLException {
+        List results = new ArrayList();
+        while (rs.next()) {
+            Schelude s = new Schelude();
+            s.setCourseName(rs.getString("name"));
+            s.setIdSchelude(rs.getInt("idschelude"));
+            s.setProfessorName(rs.getString("profname"));
+            s.setDay1(rs.getString("day1"));
+            s.setDay2(rs.getString("day2"));
+            s.setDay3(rs.getString("day3"));
+            s.setDay4(rs.getString("day4"));
+            s.setDay5(rs.getString("day5"));
+            results.add(s);
         }
         return results;
     }

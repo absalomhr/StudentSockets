@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import javax.swing.JFileChooser;
 
 /**
@@ -52,13 +53,15 @@ public class SchoolServer {
                 cl = s.accept();
                 System.out.println("CLIENT FROM: " + cl.getInetAddress() + " PORT: " + cl.getPort());
                 oisFromCl = new ObjectInputStream (cl.getInputStream());
-                // 0 = upload student
+                // 0 = upload student, 1 = login, 2 = get scheludes
                 Option op = (Option) oisFromCl.readObject();
                 clientRequest = op.getOption();
                 if (clientRequest == 0) {
                     receiveStudent();
                 } else if (clientRequest == 1) {
                     login();
+                } else if (clientRequest == 2){
+                    getAllScheludes();
                 }
             }
         } catch (Exception e) {
@@ -169,6 +172,30 @@ public class SchoolServer {
             System.err.println("LOGIN SERVER ERROR");
             e.printStackTrace();
         }
+    }
+    
+    private void getAllScheludes(){
+        List l = null;
+        DAO dao = new DAO();
+        try{
+            oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            l = dao.selectScheludeAll();
+            if (l != null){
+                oosToCl.writeObject(l);
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+            }
+            else {
+                oosToCl.writeObject(null);
+            }
+            oosToCl.close();
+        }catch(Exception e){
+            System.err.println("SCHELUDE SELECTION ERROR");
+            e.printStackTrace();
+        }
+        
     }
     
     public static void main(String args[]) {

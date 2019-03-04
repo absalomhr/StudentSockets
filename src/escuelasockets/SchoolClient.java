@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 
 /**
@@ -114,6 +115,31 @@ public class SchoolClient {
             }
         }catch (Exception e){
             System.err.println("LOGIN CL ERROR");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List getAllScheludes (){
+        try {
+            so = new Socket(host, port);
+            oosToServer = new ObjectOutputStream(so.getOutputStream());
+            Option op = new Option(2);
+            oosToServer.writeObject(op);
+            oisFromServer = new ObjectInputStream(so.getInputStream());
+            List l = null;
+            l = (List) oisFromServer.readObject();
+            if (l != null){
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+                return l;
+            } else {
+                return null;
+            }
+        }catch (Exception e){
+            System.err.println("CLIENT GET SCHELUDES ERROR");
             e.printStackTrace();
         }
         return null;

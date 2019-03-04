@@ -5,6 +5,7 @@
  */
 package escuelasockets.GUI;
 
+import escuelasockets.SchoolClient;
 import escuelasockets.Student;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.util.List;
 
 /**
  *
@@ -60,6 +62,7 @@ public class IndexStudent extends javax.swing.JFrame {
         ScheludeB = new javax.swing.JButton();
         welcomeLabel = new javax.swing.JLabel();
         picLabel = new javax.swing.JLabel();
+        enrollmentButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,6 +87,13 @@ public class IndexStudent extends javax.swing.JFrame {
             }
         });
 
+        enrollmentButton.setText("Enrollment");
+        enrollmentButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enrollmentButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -91,22 +101,22 @@ public class IndexStudent extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(ScheludeB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(gradesB, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(logoutB))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(logoutB))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                        .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(14, 14, 14)
+                        .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(61, 61, 61)
+                .addComponent(ScheludeB)
+                .addGap(94, 94, 94)
+                .addComponent(gradesB, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(enrollmentButton)
+                .addGap(77, 77, 77))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,10 +128,11 @@ public class IndexStudent extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(welcomeLabel))
                     .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
-                .addComponent(gradesB)
-                .addGap(31, 31, 31)
-                .addComponent(ScheludeB)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ScheludeB)
+                    .addComponent(enrollmentButton)
+                    .addComponent(gradesB))
                 .addGap(63, 63, 63))
         );
 
@@ -142,8 +153,20 @@ public class IndexStudent extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ScheludeBActionPerformed
 
+    private void enrollmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollmentButtonActionPerformed
+        SchoolClient c = new SchoolClient();
+        List l = null;
+        l = c.getAllScheludes();
+        if (l != null){
+            EnrollmentGUI eg = new EnrollmentGUI(s, l);
+            eg.setVisible(true);
+            this.dispose(); 
+        }
+    }//GEN-LAST:event_enrollmentButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ScheludeB;
+    private javax.swing.JButton enrollmentButton;
     private javax.swing.JButton gradesB;
     private javax.swing.JButton logoutB;
     private javax.swing.JLabel picLabel;

@@ -26,29 +26,26 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="158" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="ScheludeB" max="32767" attributes="0"/>
-                          <Component id="gradesB" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="logoutB" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="logoutB" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                              <Component id="welcomeLabel" min="-2" pref="262" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace pref="56" max="32767" attributes="0"/>
-                      <Component id="picLabel" min="-2" pref="262" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                      <Component id="welcomeLabel" min="-2" pref="262" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace pref="56" max="32767" attributes="0"/>
+              <Component id="picLabel" min="-2" pref="262" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+              <Component id="ScheludeB" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+              <Component id="gradesB" min="-2" pref="83" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="enrollmentButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="77" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,10 +61,12 @@
                   </Group>
                   <Component id="picLabel" min="-2" pref="231" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="124" max="32767" attributes="0"/>
-              <Component id="gradesB" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-              <Component id="ScheludeB" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="187" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="ScheludeB" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="enrollmentButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="gradesB" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -101,6 +100,14 @@
     <Component class="javax.swing.JLabel" name="welcomeLabel">
     </Component>
     <Component class="javax.swing.JLabel" name="picLabel">
+    </Component>
+    <Component class="javax.swing.JButton" name="enrollmentButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Enrollment"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="enrollmentButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
