@@ -144,4 +144,24 @@ public class SchoolClient {
         }
         return null;
     }
+    
+    public int enrollStudent (Student st, Schelude sch){
+        try{
+            so = new Socket(host, port);
+            oosToServer = new ObjectOutputStream(so.getOutputStream());
+            Option op = new Option(3);
+            oosToServer.writeObject(op);
+            oosToServer.writeObject(st);
+            oosToServer.writeObject(sch);
+            oisFromServer = new ObjectInputStream(so.getInputStream());
+            op = (Option) oisFromServer.readObject();
+            oosToServer.close();
+            so.close();
+            return op.getOption();
+        }catch(Exception e){
+            System.err.println("ENROLL CLIENT ERROR");
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

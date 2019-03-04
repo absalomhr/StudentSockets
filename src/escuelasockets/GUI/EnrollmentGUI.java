@@ -7,8 +7,13 @@ package escuelasockets.GUI;
 
 
 import escuelasockets.Schelude;
+import escuelasockets.SchoolClient;
 import escuelasockets.Student;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,6 +33,10 @@ public class EnrollmentGUI extends javax.swing.JFrame {
     public EnrollmentGUI(Student s, List l) {
         this.s = s;
         this.l = l;
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        this.setResizable(false);
         initComponents();
         DefaultTableModel model = (DefaultTableModel) tableEnrollment.getModel();
         for (int i = 0; i < l.size(); i++) {
@@ -101,6 +110,11 @@ public class EnrollmentGUI extends javax.swing.JFrame {
         });
 
         enrollButton.setText("Enroll Course");
+        enrollButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                enrollButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -139,6 +153,26 @@ public class EnrollmentGUI extends javax.swing.JFrame {
         is.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void enrollButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollButtonActionPerformed
+        int rowIndex = tableEnrollment.getSelectedRow();
+        Schelude sch = new Schelude();
+        sch.setIdSchelude((int) tableEnrollment.getValueAt(rowIndex, 0));
+        sch.setCourseName((String) tableEnrollment.getValueAt(rowIndex, 1));
+        sch.setProfessorName((String) tableEnrollment.getValueAt(rowIndex, 2));
+        sch.setDay1((String) tableEnrollment.getValueAt(rowIndex, 3));
+        sch.setDay2((String) tableEnrollment.getValueAt(rowIndex, 4));
+        sch.setDay3((String) tableEnrollment.getValueAt(rowIndex, 5));
+        sch.setDay4((String) tableEnrollment.getValueAt(rowIndex, 6));
+        sch.setDay5((String) tableEnrollment.getValueAt(rowIndex, 7));
+        SchoolClient c = new SchoolClient();
+        int res = c.enrollStudent(s, sch);
+        if (res == 0){
+            JOptionPane.showMessageDialog(null, "Enrollment of " + sch.getCourseName() +" completed");
+            ((DefaultTableModel)tableEnrollment.getModel()).removeRow(rowIndex);
+        }
+        System.out.println(sch.toString());
+    }//GEN-LAST:event_enrollButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;

@@ -26,9 +26,25 @@ public class DAO {
     private static final String SQL_SELECT_PROFESSOR
             = "select * from professor where professorId = ?";
     
+    private static final String SQL_ENROLL_STUDENT = "insert into enrollment (StudentId, idschelude) values (?, ?)";
+    
     private static final String SQL_SELECT_SCHELUDE_ALL1 = "create or replace view prof as select professorId, concat (name, ' ', lastname) as profname from professor";
     private static final String SQL_SELECT_SCHELUDE_ALL2 = "create or replace view c as select schelude.idschelude, schelude.day1, schelude.day2, schelude.day3, schelude.day4, schelude.day5, schelude.professorId, course.name from schelude inner join course on schelude.courseId=course.courseId";
     private static final String SQL_SELECT_SCHELUDE_ALL3 = "select c.idschelude, c.day1, c.day2, c.day3, c.day4, c.day5, c.name, prof.profname from c, prof where c.professorId=prof.professorId";
+    
+    public void enrollStudent (Student s, Schelude sch) throws SQLException{
+        PreparedStatement ps = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_ENROLL_STUDENT);
+            ps.setLong(1, s.getStudentId());
+            ps.setInt(2, sch.getIdSchelude());
+            ps.executeUpdate();
+        } finally {
+            close(ps);
+            close(con);
+        }
+    }
     public void createStudent(Student s) throws SQLException {
         PreparedStatement ps = null;
         getConnection();

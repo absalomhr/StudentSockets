@@ -52,16 +52,18 @@ public class SchoolServer {
                 System.out.println("\nSERVER ON, WAITING FOR CLIENT CONNECTION");
                 cl = s.accept();
                 System.out.println("CLIENT FROM: " + cl.getInetAddress() + " PORT: " + cl.getPort());
-                oisFromCl = new ObjectInputStream (cl.getInputStream());
-                // 0 = upload student, 1 = login, 2 = get scheludes
+                oisFromCl = new ObjectInputStream(cl.getInputStream());
+                // 0 = upload student, 1 = login, 2 = get scheludes, 3 = enroll student
                 Option op = (Option) oisFromCl.readObject();
                 clientRequest = op.getOption();
                 if (clientRequest == 0) {
                     receiveStudent();
                 } else if (clientRequest == 1) {
                     login();
-                } else if (clientRequest == 2){
+                } else if (clientRequest == 2) {
                     getAllScheludes();
+                } else if (clientRequest == 3) {
+                    enrollStudent();
                 }
             }
         } catch (Exception e) {
@@ -75,7 +77,7 @@ public class SchoolServer {
         String fileName;
         try {
             Student st = (Student) oisFromCl.readObject();
-            ServerSocket s1 = new ServerSocket(port+1);
+            ServerSocket s1 = new ServerSocket(port + 1);
             Socket cl2 = s1.accept();
             disFromCl = new DataInputStream(cl2.getInputStream());
             // Reading image data: size, name, file extention, student id, student name, last name, pass
@@ -107,7 +109,7 @@ public class SchoolServer {
             System.out.println("PASS: " + st.getPass());
             System.out.println("NAME: " + st.getName());
             System.out.println("LAST NAME: " + st.getLastName());
-            System.out.println("PATH: " + st.getStudentPhotoPath()); 
+            System.out.println("PATH: " + st.getStudentPhotoPath());            
             DAO dao = new DAO();
             dao.createStudent(st);
         } catch (Exception e) {
@@ -135,7 +137,7 @@ public class SchoolServer {
                 disFromFile = new DataInputStream(new FileInputStream(st2.getStudentPhotoPath()));
                 Long fileSize = f.length();
                 String name = f.getName();
-                ServerSocket s2 = new ServerSocket(port+1);
+                ServerSocket s2 = new ServerSocket(port + 1);
                 Socket cl2 = s2.accept();
                 dosToCl = new DataOutputStream(cl2.getOutputStream());
                 
@@ -160,7 +162,7 @@ public class SchoolServer {
                 s2.close();
             } else if (st2 == null) {
                 Professor p = dao.selectProfessor(user);
-                if (p != null && p.getPass().equals(pass)){
+                if (p != null && p.getPass().equals(pass)) {
                     oosToCl.writeObject(new Option(1)); // 0 Student, 1 Professor, 2 NotFound
                     oosToCl.writeObject(p);
                     oosToCl.close();
@@ -174,28 +176,44 @@ public class SchoolServer {
         }
     }
     
-    private void getAllScheludes(){
+    private void getAllScheludes() {
         List l = null;
         DAO dao = new DAO();
-        try{
+        try {
             oosToCl = new ObjectOutputStream(cl.getOutputStream());
             l = dao.selectScheludeAll();
-            if (l != null){
+            if (l != null) {
                 oosToCl.writeObject(l);
                 /*for (int i = 0; i < l.size(); i++) {
                     Schelude sche = (Schelude) l.get(i);
                     System.out.println(sche.getIdSchelude());
                 }*/
-            }
-            else {
+            } else {
                 oosToCl.writeObject(null);
             }
             oosToCl.close();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.err.println("SCHELUDE SELECTION ERROR");
             e.printStackTrace();
         }
         
+    }
+    
+    public void enrollStudent() {
+        try {
+            Student st = (Student) oisFromCl.readObject();
+            Schelude sch = (Schelude) oisFromCl.readObject();
+            DAO dao = new DAO();
+            dao.enrollStudent(st, sch);
+            oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            oosToCl.writeObject(new Option(0));
+            
+            oisFromCl.close();
+            cl.close();
+        } catch (Exception e) {
+            System.err.println("ENROLL ERROR");
+            e.printStackTrace();
+        }
     }
     
     public static void main(String args[]) {

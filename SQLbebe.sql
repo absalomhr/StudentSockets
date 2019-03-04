@@ -64,10 +64,10 @@ insert into course values (7, 'Machine Learning');
 insert into course values (8, 'Information Ethics');
 
 insert into schelude values (1, 1, '10:30-12:00', '10:30-12:00', '-', '10:30-12:00', '-', 12345678);
-insert into schelude values (2, 2, '10:30-12:00', '10:30-12:00', '-', '10:30-12:00', '-', 12345678);
+insert into schelude values (2, 2, '13:30-15:00', '13:30-15:00', '-', '13:30-15:00', '-', 12345678);
 insert into schelude values (3, 3, '08:30-10:00', '08:30-10:00', '-', '08:30-10:00', '-', 87654321);
-insert into schelude values (4, 4, '08:30-10:00', '08:30-10:00', '-', '08:30-10:00', '-', 87654321);
+insert into schelude values (4, 4, '16:30-18:00', '16:30-18:00', '-', '16:30-18:00', '-', 87654321);
 insert into schelude values (5, 5, '-', '13:30-15:00', '13:30-15:00', '-', '13:30-15:00', 11112222);
-insert into schelude values (6, 6, '-', '13:30-15:00', '13:30-15:00', '-', '13:30-15:00', 11112222);
-insert into schelude values (7, 7, '07:30-08:30', '-', '07:00-08:30', '-', '07:30-08:30', 77700777);
-insert into schelude values (8, 8, '07:30-08:30', '-', '07:00-08:30', '-', '07:30-08:30', 77700777);
+insert into schelude values (6, 6, '-', '16:30-18:00', '16:30-18:00', '-', '16:30-18:00', 11112222);
+insert into schelude values (7, 7, '07:00-08:30', '-', '07:00-08:30', '-', '07:00-08:30', 77700777);
+insert into schelude values (8, 8, '18:00-20:00', '-', '18:00-20:00', '-', '18:00-20:00', 77700777);

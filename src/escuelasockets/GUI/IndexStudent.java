@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.util.List;
+import javax.swing.JFrame;
 
 /**
  *
@@ -28,6 +29,10 @@ public class IndexStudent extends javax.swing.JFrame {
      * Creates new form Inicio
      */
     public IndexStudent(Student s) {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        this.setResizable(false);
         this.s = s;
         initComponents();
         
@@ -42,7 +47,7 @@ public class IndexStudent extends javax.swing.JFrame {
         ImageIcon ic = new ImageIcon(dimg);
         picLabel.setIcon(ic);
         welcomeLabel.setText("Welcome, "+ s.getName() + "!");
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);
         this.setVisible(true);
