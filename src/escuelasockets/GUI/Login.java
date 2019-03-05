@@ -22,11 +22,12 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        
         this.setResizable(false);
         
         initComponents();
+        this.pack();
+        this.setLocationRelativeTo(null);
     }
 
     /**

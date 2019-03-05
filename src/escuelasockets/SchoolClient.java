@@ -120,12 +120,13 @@ public class SchoolClient {
         return null;
     }
     
-    public List getAllScheludes (){
+    public List getAllScheludes (Student s){
         try {
             so = new Socket(host, port);
             oosToServer = new ObjectOutputStream(so.getOutputStream());
             Option op = new Option(2);
             oosToServer.writeObject(op);
+            oosToServer.writeObject(s);
             oisFromServer = new ObjectInputStream(so.getInputStream());
             List l = null;
             l = (List) oisFromServer.readObject();
@@ -140,6 +141,58 @@ public class SchoolClient {
             }
         }catch (Exception e){
             System.err.println("CLIENT GET SCHELUDES ERROR");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List getSingleSchelude (Student s){
+        try {
+            so = new Socket(host, port);
+            oosToServer = new ObjectOutputStream(so.getOutputStream());
+            Option op = new Option(4);
+            oosToServer.writeObject(op);
+            oosToServer.writeObject(s);
+            oisFromServer = new ObjectInputStream(so.getInputStream());
+            List l = null;
+            l = (List) oisFromServer.readObject();
+            if (l != null){
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+                return l;
+            } else {
+                return null;
+            }
+        }catch (Exception e){
+            System.err.println("CLIENT GET SINGLE SCHELUDE ERROR");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List getSingleGrade (Student s){
+        try {
+            so = new Socket(host, port);
+            oosToServer = new ObjectOutputStream(so.getOutputStream());
+            Option op = new Option(5);
+            oosToServer.writeObject(op);
+            oosToServer.writeObject(s);
+            oisFromServer = new ObjectInputStream(so.getInputStream());
+            List l = null;
+            l = (List) oisFromServer.readObject();
+            if (l != null) {
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+                return l;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.err.println("CLIENT GET SINGLE GRADE ERROR");
             e.printStackTrace();
         }
         return null;

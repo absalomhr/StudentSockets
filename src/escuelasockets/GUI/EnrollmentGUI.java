@@ -34,14 +34,14 @@ public class EnrollmentGUI extends javax.swing.JFrame {
         this.s = s;
         this.l = l;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);
         initComponents();
+        this.pack();
+        this.setLocationRelativeTo(null);
         DefaultTableModel model = (DefaultTableModel) tableEnrollment.getModel();
         for (int i = 0; i < l.size(); i++) {
             Schelude sche = (Schelude) l.get(i);
-            model.addRow(new Object[]{sche.getIdSchelude(), sche.getCourseName(), sche.getProfessorName(), sche.getDay1(), sche.getDay2(), sche.getDay3(), sche.getDay4(), sche.getDay5()});
+            model.addRow(new Object[]{sche.getIdSchelude(), sche.getCourseName(), sche.getProfessorName() + " " + sche.getProfessorLastName(), sche.getDay1(), sche.getDay2(), sche.getDay3(), sche.getDay4(), sche.getDay5()});
         }
         //tableEnrollment.setPreferredScrollableViewportSize(tableEnrollment.getPreferredSize());
         //this.repaint();

@@ -30,12 +30,11 @@ public class IndexStudent extends javax.swing.JFrame {
      */
     public IndexStudent(Student s) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);
         this.s = s;
         initComponents();
-        
+        this.pack();
+        this.setLocationRelativeTo(null);
         BufferedImage img = null;
         try {
             img = ImageIO.read(new File(s.getStudentPhotoPath()));
@@ -47,7 +46,7 @@ public class IndexStudent extends javax.swing.JFrame {
         ImageIcon ic = new ImageIcon(dimg);
         picLabel.setIcon(ic);
         welcomeLabel.setText("Welcome, "+ s.getName() + "!");
-        dim = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.setResizable(false);
         this.setVisible(true);
@@ -111,17 +110,17 @@ public class IndexStudent extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(welcomeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(61, 61, 61)
+                .addGap(47, 47, 47)
                 .addComponent(ScheludeB)
-                .addGap(94, 94, 94)
+                .addGap(81, 81, 81)
                 .addComponent(gradesB, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(enrollmentButton)
-                .addGap(77, 77, 77))
+                .addGap(78, 78, 78))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +132,7 @@ public class IndexStudent extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addComponent(welcomeLabel))
                     .addComponent(picLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 187, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ScheludeB)
                     .addComponent(enrollmentButton)
@@ -151,17 +150,31 @@ public class IndexStudent extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutBActionPerformed
 
     private void gradesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gradesBActionPerformed
-        // TODO add your handling code here:
+        SchoolClient c = new SchoolClient();
+        List l = null;
+        l = c.getSingleGrade(s);
+        if (l != null) {
+            GradeGUI sg = new GradeGUI(s, l);
+            sg.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_gradesBActionPerformed
 
     private void ScheludeBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ScheludeBActionPerformed
-        // TODO add your handling code here:
+        SchoolClient c = new SchoolClient();
+        List l = null;
+        l = c.getSingleSchelude(s);
+        if (l != null){
+            ScheludeGUI sg = new ScheludeGUI(s, l);
+            sg.setVisible(true);
+            this.dispose(); 
+        }
     }//GEN-LAST:event_ScheludeBActionPerformed
 
     private void enrollmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollmentButtonActionPerformed
         SchoolClient c = new SchoolClient();
         List l = null;
-        l = c.getAllScheludes();
+        l = c.getAllScheludes(s);
         if (l != null){
             EnrollmentGUI eg = new EnrollmentGUI(s, l);
             eg.setVisible(true);

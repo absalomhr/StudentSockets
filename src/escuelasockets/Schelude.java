@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class Schelude implements Serializable {
 
     private int idSchelude;
-    private String day1, day2, day3, day4, day5, courseName, professorName;
+    private String day1, day2, day3, day4, day5, courseName, professorName, professorLastName;
 
     public Schelude() {
     }
@@ -83,8 +83,18 @@ public class Schelude implements Serializable {
         this.professorName = professorName;
     }
 
+    public String getProfessorLastName() {
+        return professorLastName;
+    }
+
+    public void setProfessorLastName(String professorLastName) {
+        this.professorLastName = professorLastName;
+    }
+
     @Override
     public String toString() {
-        return "Schelude{" + "idSchelude=" + idSchelude + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", day4=" + day4 + ", day5=" + day5 + ", courseName=" + courseName + ", professorName=" + professorName + '}';
+        return "Schelude{" + "idSchelude=" + idSchelude + ", day1=" + day1 + ", day2=" + day2 + ", day3=" + day3 + ", day4=" + day4 + ", day5=" + day5 + ", courseName=" + courseName + ", professorName=" + professorName + ", professorLastName=" + professorLastName + '}';
     }
+
+    
 }

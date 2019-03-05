@@ -53,7 +53,7 @@ public class SchoolServer {
                 cl = s.accept();
                 System.out.println("CLIENT FROM: " + cl.getInetAddress() + " PORT: " + cl.getPort());
                 oisFromCl = new ObjectInputStream(cl.getInputStream());
-                // 0 = upload student, 1 = login, 2 = get scheludes, 3 = enroll student
+                // 0 = upload student, 1 = login, 2 = get scheludes, 3 = enroll student, 4 = single schelude, 5 = sigle grade
                 Option op = (Option) oisFromCl.readObject();
                 clientRequest = op.getOption();
                 if (clientRequest == 0) {
@@ -64,7 +64,11 @@ public class SchoolServer {
                     getAllScheludes();
                 } else if (clientRequest == 3) {
                     enrollStudent();
-                }
+                } else if (clientRequest == 4){
+                    getSingleSchelude();
+                } else if (clientRequest == 5){
+                    getGrade();
+                } 
             }
         } catch (Exception e) {
             System.err.println("CONNECT ERROR:");
@@ -180,8 +184,9 @@ public class SchoolServer {
         List l = null;
         DAO dao = new DAO();
         try {
+            Student s = (Student) oisFromCl.readObject();
             oosToCl = new ObjectOutputStream(cl.getOutputStream());
-            l = dao.selectScheludeAll();
+            l = dao.selectScheludeAll(s);
             if (l != null) {
                 oosToCl.writeObject(l);
                 /*for (int i = 0; i < l.size(); i++) {
@@ -199,6 +204,29 @@ public class SchoolServer {
         
     }
     
+    private void getSingleSchelude (){
+        List l = null;
+        DAO dao = new DAO();
+        try {
+            Student s = (Student) oisFromCl.readObject();
+            oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            l = dao.selectSingleSchelude(s);
+            if (l != null) {
+                oosToCl.writeObject(l);
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+            } else {
+                oosToCl.writeObject(null);
+            }
+            oosToCl.close();
+        } catch (Exception e) {
+            System.err.println("SINGLE SCHELUDE SELECTION ERROR");
+            e.printStackTrace();
+        }
+    }
+    
     public void enrollStudent() {
         try {
             Student st = (Student) oisFromCl.readObject();
@@ -211,9 +239,34 @@ public class SchoolServer {
             oisFromCl.close();
             cl.close();
         } catch (Exception e) {
-            System.err.println("ENROLL ERROR");
+            System.err.println("ENROLL ERROR"); 
             e.printStackTrace();
         }
+    }
+    
+    public void getGrade () {
+        List l = null;
+        DAO dao = new DAO();
+        try{
+            Student s = (Student) oisFromCl.readObject();
+            oosToCl = new ObjectOutputStream(cl.getOutputStream());
+            l = dao.selectSingleGrade(s);
+            if (l != null) {
+                oosToCl.writeObject(l);
+                /*for (int i = 0; i < l.size(); i++) {
+                    Schelude sche = (Schelude) l.get(i);
+                    System.out.println(sche.getIdSchelude());
+                }*/
+            } else {
+                oosToCl.writeObject(null);
+            }
+            oosToCl.close();
+        }catch(Exception e){
+            System.err.println("SERVER GET GRADE ERROR");
+            e.printStackTrace();
+        }
+        
+        
     }
     
     public static void main(String args[]) {

@@ -28,9 +28,16 @@ public class DAO {
     
     private static final String SQL_ENROLL_STUDENT = "insert into enrollment (StudentId, idschelude) values (?, ?)";
     
-    private static final String SQL_SELECT_SCHELUDE_ALL1 = "create or replace view prof as select professorId, concat (name, ' ', lastname) as profname from professor";
-    private static final String SQL_SELECT_SCHELUDE_ALL2 = "create or replace view c as select schelude.idschelude, schelude.day1, schelude.day2, schelude.day3, schelude.day4, schelude.day5, schelude.professorId, course.name from schelude inner join course on schelude.courseId=course.courseId";
-    private static final String SQL_SELECT_SCHELUDE_ALL3 = "select c.idschelude, c.day1, c.day2, c.day3, c.day4, c.day5, c.name, prof.profname from c, prof where c.professorId=prof.professorId";
+    private static final String SQL_SELECT_SCHELUDE_ALL = "select schelude.idschelude,day1,day2,day3,day4,day5,NameC,name,LastName\n" +
+"from ((schelude natural join course)natural join professor) where schelude.idschelude not in (select enrollment.idschelude from enrollment where StudentId=?)";
+    
+    private static final String SQL_SINGLE_SCHELUDE = "select idschelude,StudentId,day1,day2,day3,day4,day5,NameC,name,LastName\n" +
+"from (((schelude natural join course)natural join professor)natural join enrollment)\n" +
+"where StudentId = ?";
+    
+    private static final String SQL_SINGLE_GRADES = "select StudentId,Name,NameC,grade\n" +
+"from (student natural join grades)natural join course \n" +
+"where StudentId = ?";
     
     public void enrollStudent (Student s, Schelude sch) throws SQLException{
         PreparedStatement ps = null;
@@ -104,19 +111,14 @@ public class DAO {
         }
     }
     
-    public List selectScheludeAll () throws SQLException {
-        PreparedStatement ps1 = null;
-        PreparedStatement ps2 = null;
-        PreparedStatement ps3 = null;
+    public List selectScheludeAll (Student s) throws SQLException {
+        PreparedStatement ps = null;
         ResultSet rs = null;
         getConnection();
         try {
-            ps1 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL1);
-            ps2 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL2);
-            ps3 = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL3);
-            ps1.executeUpdate();
-            ps2.executeUpdate();
-            rs = ps3.executeQuery();
+            ps = con.prepareStatement(SQL_SELECT_SCHELUDE_ALL);
+            ps.setLong(1, s.getStudentId());
+            rs = ps.executeQuery();
             List results = getResultsSchelude(rs);
             if (results.size() > 0) {
                 return results;
@@ -125,9 +127,49 @@ public class DAO {
             }
         } finally {
             close(rs);
-            close(ps1);
-            close(ps2);
-            close(ps3);
+            close(ps);
+            close(con);
+        }
+    }
+    
+    public List selectSingleSchelude (Student s) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SINGLE_SCHELUDE);
+            ps.setLong(1, s.getStudentId());
+            rs = ps.executeQuery();
+            List results = getResultsSchelude(rs);
+            if (results.size() > 0) {
+                return results;
+            } else {
+                return null;
+            }
+        } finally {
+            close(rs);
+            close(ps);
+            close(con);
+        }
+    }
+    
+    public List selectSingleGrade (Student s) throws SQLException{
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        getConnection();
+        try {
+            ps = con.prepareStatement(SQL_SINGLE_GRADES);
+            ps.setLong(1, s.getStudentId());
+            rs = ps.executeQuery();
+            List results = getResultsGrade(rs);
+            if (results.size() > 0) {
+                return results;
+            } else {
+                return null;
+            }
+        } finally {
+            close(rs);
+            close(ps);
             close(con);
         }
     }
@@ -143,6 +185,17 @@ public class DAO {
             s.setStudentPhotoPath(rs.getString("StudentPhoto"));
 
             results.add(s);
+        }
+        return results;
+    }
+    
+    private List getResultsGrade (ResultSet rs) throws SQLException {
+        List results = new ArrayList();
+        while (rs.next()) {
+            Grade g = new Grade();
+            g.setCourseName(rs.getString("NameC"));
+            g.setGrade(rs.getInt("grade"));
+            results.add(g);
         }
         return results;
     }
@@ -164,9 +217,10 @@ public class DAO {
         List results = new ArrayList();
         while (rs.next()) {
             Schelude s = new Schelude();
-            s.setCourseName(rs.getString("name"));
+            s.setCourseName(rs.getString("NameC"));
+            s.setProfessorLastName(rs.getString("LastName"));
             s.setIdSchelude(rs.getInt("idschelude"));
-            s.setProfessorName(rs.getString("profname"));
+            s.setProfessorName(rs.getString("name"));
             s.setDay1(rs.getString("day1"));
             s.setDay2(rs.getString("day2"));
             s.setDay3(rs.getString("day3"));
