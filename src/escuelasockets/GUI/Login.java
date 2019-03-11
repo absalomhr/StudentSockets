@@ -3,9 +3,6 @@ package escuelasockets.GUI;
 import escuelasockets.Professor;
 import escuelasockets.SchoolClient;
 import escuelasockets.Student;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 

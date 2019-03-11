@@ -33,7 +33,7 @@ public class SchoolServer {
     int port;
     
     public SchoolServer() {
-        serverRoute = "C:\\Users\\elpat\\Documents\\lolaz";
+        serverRoute = "C:\\Users\\elpat\\Documents\\ServerSchool";
         clientRequest = -1;
         port = 9999;
         

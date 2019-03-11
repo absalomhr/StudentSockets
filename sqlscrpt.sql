@@ -79,22 +79,6 @@ insert into schelude values (8, 8, '18:00-20:00', '-', '18:00-20:00', '-', '18:0
 /* Test grades */
 
 
-insert into grades values  (2016630552, 3, 8);
-insert into grades values  (2016630552, 4, 9);
-insert into grades values  (2016630552, 6, 7);
-
-
-
-
-/* poblado para test */
-
-insert into student values (2016630552, 'Absalom', 'Herrera', '1234', 'rutaX');
-insert into student values (2018630552, 'Maxim', 'Gorky', '1111', 'rutaY');
-
-insert into enrollment values (2016630552, 1);
-insert into enrollment values (2016630552, 2);
-insert into enrollment values (2016630552, 3);
-
-insert into enrollment values (2018630552, 4);
-insert into enrollment values (2018630552, 5);
-insert into enrollment values (2018630552, 6);
+insert into grades values  (2017640653, 1, 8);
+insert into grades values  (2017640653, 2, 9);
+insert into grades values  (2017640653, 4, 7);

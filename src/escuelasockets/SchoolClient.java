@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import org.apache.commons.io.FilenameUtils;
+
 
 /**
  *
@@ -32,7 +32,7 @@ public class SchoolClient {
     public SchoolClient() {
         host = "127.0.0.1";
         port = 9999;
-        clientRoute = "C:\\Users\\elpat\\Documents\\lul";
+        clientRoute = "C:\\Users\\elpat\\Documents\\ClientSchool";
     }
 
     public void sendStudent (Student s){
